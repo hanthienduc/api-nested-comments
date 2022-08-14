@@ -19,6 +19,19 @@ app.register(fastifyCors, {
 
 const prisma = new PrismaClient()
 
+const CURRENT_USER_ID = (await prisma.user.findFirst({ where: { name: 'Kyle' } })).id
+
+app.addHook("onRequest", (req, res, done) => {
+  if (req.cookies.userId !== CURRENT_USER_ID) {
+    req.cookies.userId = CURRENT_USER_ID
+    res.clearCookie('userId')
+    res.setCookie("userId", CURRENT_USER_ID)
+  }
+  done()
+})
+
+
+
 app.get('/', async (req, res) => {
   return await prisma.post.findMany({
     select: {
