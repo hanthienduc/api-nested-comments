@@ -39,6 +39,59 @@ app.get('/posts', async (req, res) => {
   }))
 })
 
+const COMMENTS_SELECT_FIELDS = {
+  id: true,
+  message: true,
+  parentId: true,
+  createdAt: true,
+  user: {
+    select: {
+      id: true,
+      name: true
+    }
+  }
+}
+
+app.get('/posts/:id', async (req, res) => {
+  return await commitToDb(prisma.post.findUnique({
+    where: { id: req.params.id },
+    select: {
+      body: true,
+      title: true,
+      comments: {
+        orderBy: {
+          createdAt: 'desc'
+        },
+        select: {
+          ...COMMENTS_SELECT_FIELDS,
+          _count: { select: { likes: true } }
+        }
+      }
+    }
+  })
+    .then(async post => {
+      const likes = await prisma.like.findMany({
+        where: {
+          userId: req.cookies.userId,
+          commentId: { in: post.comments.map(comment => comment.id) }
+        }
+      })
+
+      return {
+        ...post,
+        comments: post.comments.map(comment => {
+          const { _count, ...commentFields } = comment
+          return {
+            ...commentFields,
+            likedByMe: likes.find(like => like.commentId === comment.id),
+            likeCount: _count.likes
+          }
+        })
+      }
+    })
+  )
+})
+
 async function commitToDb(promise) {
   const [error, data] = await app.to(promise)
   if (error) return app.httpErrors.internalServerError(error.message)

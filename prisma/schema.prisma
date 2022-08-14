@@ -29,9 +29,9 @@ model Comment {
   message   String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  User      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  Post      Post      @relation(fields: [postId], references: [id])
+  post      Post      @relation(fields: [postId], references: [id])
   postId    String
   parent    Comment?  @relation("ParentChild", fields: [parentId], references: [id])
   parentId  String?
@@ -40,9 +40,9 @@ model Comment {
 }
 
 model Like {
-  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  Comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String
   @@id([userId, commentId])
 }
