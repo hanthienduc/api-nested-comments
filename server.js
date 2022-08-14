@@ -30,15 +30,20 @@ app.addHook("onRequest", (req, res, done) => {
   done()
 })
 
-
-
-app.get('/', async (req, res) => {
-  return await prisma.post.findMany({
+app.get('/posts', async (req, res) => {
+  return await commitToDb(prisma.post.findMany({
     select: {
+      id: true,
       title: true
     }
-  })
+  }))
 })
+
+async function commitToDb(promise) {
+  const [error, data] = await app.to(promise)
+  if (error) return app.httpErrors.internalServerError(error.message)
+  return data
+}
 
 const port = process.env.PORT || 3002
 
