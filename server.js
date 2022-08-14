@@ -92,6 +92,30 @@ app.get('/posts/:id', async (req, res) => {
   )
 })
 
+app.post('/posts/:id/comments', async (req, res) => {
+  if (req.body.message === '' || req.body.message == null) {
+    return res.send(app.httpErrors.badRequest('Message is required'))
+  }
+
+  return await commitToDb(
+    prisma.comment.create({
+      data: {
+        message: req.body.message,
+        userId: req.cookies.userId,
+        postId: req.params.id,
+        parentId: req.body.parentId,
+      },
+      select: COMMENTS_SELECT_FIELDS
+    }).then(comment => {
+      return {
+        ...comment,
+        likeCount: 0,
+        likedByMe: false
+      }
+    })
+  )
+})
+
 async function commitToDb(promise) {
   const [error, data] = await app.to(promise)
   if (error) return app.httpErrors.internalServerError(error.message)
