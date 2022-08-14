@@ -1,0 +1,34 @@
+import fastify from "fastify";
+import fastifyCookie from "@fastify/cookie";
+import fastifyCors from "@fastify/cors";
+import dotenv from 'dotenv'
+dotenv.config()
+import { PrismaClient } from '@prisma/client'
+import fastifySensible from "@fastify/sensible";
+
+const app = fastify()
+app.register(fastifySensible)
+app.register(fastifyCookie, {
+  secret: process.env.COOKIE_SECRET
+})
+
+app.register(fastifyCors, {
+  origin: process.env.CLIENT_URL,
+  credentials: true
+})
+
+const prisma = new PrismaClient()
+
+app.get('/', async (req, res) => {
+  return await prisma.post.findMany({
+    select: {
+      title: true
+    }
+  })
+})
+
+const port = process.env.PORT || 3002
+
+app.listen({ port }, () => {
+  console.log(`Server is Running on port ${port} `)
+})
