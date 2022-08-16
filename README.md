@@ -1,7 +1,11 @@
 # nested comments API 
 
 # API Endpoints
-- Add, Delete, Update, and Like Comment.
+- http://localhost:3001/posts/ -> GET all the posts
+- http://localhost:3001/posts/:id -> GET a specific post 
+- http://localhost:3001/posts/:id/comments -> get all comments or post a comments
+- http://localhost:3001/posts/:postId/comments/:commentId -> update or delete delete a comment
+- http://localhost:3001/posts/:postId/comments/:commentId/toggleLike -> Like or Unlike a a comment
 
 ## dependencies
 -  @prisma/client": "^4.2.0", ->  ORM (Object relation management tools)
