@@ -16,3 +16,5 @@
 - clone this repo, in command line navigate to the server directory
 - in the server folder create `.env` file and add 3 env variables: DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/comments", PORT=3001, CLIENT_URL=http://localhost:3000 
 - to start the server in the server folder run `npm run devStart` the server is on [http://locahost:3001](http://locahost:3001)
+
+## [Front End Repo](https://github.com/hanthienduc/react-nested-comments)
