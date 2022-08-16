@@ -1,9 +1,7 @@
 # nested comments API 
 
-# Features
-- Able to Add, Delete, Update Comment by UserId.
-- Update and Delete specific comment can only done by same person added the comment
-- Can have nested comments
+# API Endpoints
+- Add, Delete, Update, and Like Comment.
 
 ## dependencies
 -  @prisma/client": "^4.2.0", ->  ORM (Object relation management tools)
