@@ -116,7 +116,7 @@ app.post('/posts/:id/comments', async (req, res) => {
   )
 })
 
-app.put('/pots/:postId/comments/:commentId', async (req, res) => {
+app.put('/posts/:postId/comments/:commentId', async (req, res) => {
   if (req.body.message === '' || req.body.message == null) {
     return res.send(app.httpErrors.badRequest('Message is required'))
   }
